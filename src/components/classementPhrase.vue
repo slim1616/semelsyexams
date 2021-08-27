@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    {{ flatWordsgroupesIds }}
+    {{ over }}
     <div>
       <div>
         <button @click.prevent.stop="lang = 'ltr'">français</button>
@@ -42,18 +42,24 @@
           v-for="(groupe, i) in groupes"
           :key="i"
           class="groupe"
+          :class="{ over: over }"
           @dragover.prevent
-          @dragenter.prevent
+          @dragenter="over = true"
+          @dragleave="over = false"
           @dragover="dragover"
           @drop="onDrop($event, groupe)"
         >
-          <div>
-            <button @click.prevent.stop="effaceGroupe(groupe)">X</button>
+          <div class="groupe-heeader">
             <h3>{{ groupe.groupename }}</h3>
+            <button @click.prevent.stop="effaceGroupe(groupe)">X</button>
           </div>
           <ul>
             <template v-if="groupe.items.length > 0">
-              <li v-for="(item, i) in groupe.items" :key="i">
+              <li
+                v-for="(item, i) in groupe.items"
+                :key="i"
+                style="margin: 4px"
+              >
                 <button @click.prevent.stop="effaceItem(groupe, item)">
                   X
                 </button>
@@ -104,8 +110,8 @@
                   v-for="(item, i) in groupe.items"
                   :key="i"
                   :class="{
-                    correct: isCorrect(groupe, item),
-                    wrong: !isCorrect(groupe, item),
+                    correct: isCorrect(groupe, item) && showCorrection,
+                    wrong: !isCorrect(groupe, item) && showCorrection,
                   }"
                 >
                   {{ item.word }}
@@ -136,6 +142,7 @@ export default {
       words: [],
       list2: [],
       reponses: [],
+      over: false,
     };
   },
   methods: {
@@ -200,6 +207,7 @@ export default {
       evt.dataTransfer.setData("text", JSON.stringify(item));
     },
     onDrop(evt, groupe) {
+      this.over = false;
       console.log(evt.dataTransfer.getData("text"));
       const newEl = JSON.parse(evt.dataTransfer.getData("text"));
       let groupes = this.groupes;
@@ -213,6 +221,7 @@ export default {
     },
     dragover(evt) {
       console.log("dragover");
+      this.over = true;
       //console.log(evt.added.element);
     },
     checkfillIn(evt) {
@@ -346,6 +355,7 @@ p {
   background: red;
 }
 .groupe {
+  border: solid 1px #111;
   background: #eee;
   min-width: 150px;
   max-width: 250px;
@@ -359,5 +369,13 @@ p {
 }
 .groupes {
   display: flex;
+}
+.groupe-heeader {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+}
+.over {
+  background: orange;
 }
 </style>
