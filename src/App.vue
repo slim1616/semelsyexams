@@ -1,22 +1,18 @@
 <template>
   <div id="app">
-    <classification />
-    <br />
+    <router-link class="link" to="/HelloWorld">mots</router-link>
+    <router-link class="link" to="/classification">groupes de mots</router-link>
+    <router-link class="link" to="/sortPhrase">classement</router-link>
+    <router-link class="link" to="/selectText">select Text</router-link>
+
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
-import classification from "./components/classementPhrase";
-import sortPhrase from "./components/sortPhrase";
-
 export default {
   name: "App",
-  components: {
-    HelloWorld,
-    classification,
-    sortPhrase,
-  },
+
   data() {
     return {
       sentence: "This is a [test] sentence [test] for [demonstration] purposes",
@@ -33,5 +29,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.link {
+  margin: 5px;
 }
 </style>
