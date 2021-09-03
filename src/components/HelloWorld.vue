@@ -102,7 +102,7 @@
             class="span"
             :key="element.id"
             @drop="onDrop($event, element)"
-            >_______</span
+            >_______ </span
           >
         </template>
       </template>
